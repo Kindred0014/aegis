@@ -1,5 +1,9 @@
 .container {
 	display: flex;
+	width: min(1600px, calc(100vw - 2rem));
+	max-height: calc(100vh - 2rem);
+	box-sizing: border-box;
+	overflow: auto;
 	& h2 {
 		margin: 0 0 2rem 0;
 	}
@@ -18,5 +22,11 @@
 		&:last-of-type {
 			padding: 0 0 1rem 0;
 		}
+	}
+}
+
+@media (max-width: 1100px) {
+	.container {
+		flex-direction: column;
 	}
 }

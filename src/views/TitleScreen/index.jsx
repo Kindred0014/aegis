@@ -5,17 +5,19 @@
  */
 
 import { GameMenu, GameFooter } from '../shared'
+import useStore from 'store'
+import { translateInterfaceText } from 'utils/zh-CN'
 import styles from './index.module.scss'
 
 const TitleScreenView = () => {
+	const language = useStore((state) => state.language)
 	return (
 		<div className={styles.container}>
 			<h1>Aegis</h1>
 			<h2>
-				A tiny game to practice
-				<br /> Age of Empires IV building shortcuts.
+				{translateInterfaceText('A tiny game to practise Age of Empires IV building shortcuts.', language)}
 			</h2>
-			<GameMenu />
+			<GameMenu showLanguageSwitch />
 			<GameFooter />
 		</div>
 	)

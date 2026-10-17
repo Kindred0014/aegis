@@ -21,6 +21,8 @@ const useStore = create((set) => ({
 	optionsModalOpen: false,
 	setOptionsModalOpen: (value) => set(() => ({ optionsModalOpen: value })),
 	keyPressed: false,
+	language: 'en',
+	setLanguage: (value) => set(() => ({ language: value })),
 	handleKeyPressed: (value) => set(() => ({ keyPressed: value })),
 
 	/**
@@ -140,6 +142,22 @@ const useStore = create((set) => ({
 				recipe
 			}
 		}),
+	handleReturnHome: () =>
+		set(() => ({
+			keyPressed: false,
+			tickPreemptive: 0,
+			tick: 0,
+			gameState: '0/2',
+			isPlaying: false,
+		recipe: null,
+		score: 0,
+		startTime: 0,
+		promptStartTime: 0,
+		promptTimes: {},
+		incorrectInputs: 0,
+			endResult: null,
+			optionsModalOpen: false
+		})),
 	handleGameEnd: () =>
 		set((state) => {
 			const finishTime = currentTimeInSeconds()

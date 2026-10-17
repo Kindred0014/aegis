@@ -53,6 +53,8 @@ const SegmentedInput = ({
 								className={styles.input}
 								checked={value === option.value}
 								name={name}
+								aria-label={option.title || option.value}
+								title={option.title}
 								onChange={handleChange}
 								onKeyDown={handleKeyDown}
 								tabIndex={0}
@@ -72,7 +74,7 @@ const SegmentedInput = ({
 										${styles.icon}
 										${children ? styles.gap : null}`}
 											src={option.icon}
-											alt={name}
+										alt={option.title || name}
 										/>
 									))}
 								{children && children}

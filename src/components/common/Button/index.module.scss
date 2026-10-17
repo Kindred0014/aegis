@@ -43,7 +43,34 @@
 	display: flex;
 	width: 80%;
 
-	& button:first-child {
+	& > button:first-child {
 		margin-right: var(--horizontal-gap);
+	}
+}
+
+.withLanguage {
+	display: grid;
+	width: min(624px, calc(100vw - 2rem));
+	grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) 4.5rem;
+	column-gap: 12px;
+
+	& > button:first-child {
+		margin-right: 0;
+	}
+
+	& > button {
+		width: 100%;
+		min-width: 0;
+	}
+}
+
+@media (max-width: 520px) {
+	.withLanguage {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+
+		& > div:last-child {
+			grid-column: 2;
+			justify-self: end;
+		}
 	}
 }

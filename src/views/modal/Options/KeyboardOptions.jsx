@@ -2,8 +2,12 @@ import useStore from "store";
 import { useState, useRef, useCallback } from "react";
 import { useOnClickOutside, useKeyPress, useEffectOnce } from "hooks";
 import { WrapSegmentedInputComponent } from "./shared";
+import { Button } from "components/common/Button";
+import LanguageSwitch from "components/common/LanguageSwitch";
 import { deriveKeyboardLayout } from "utils/keyboard";
 import styles from "./keyboardOptions.module.scss";
+import { translateBuildingName, translateInterfaceText } from "utils/zh-CN";
+import { isCommonBuildingExcluded } from "utils/game";
 
 // Assets
 import buildings from "assets/buildings";
@@ -14,11 +18,14 @@ const KeyboardOptions = () => {
   /**
    * Get all option values and setters from Zustand
    */
-  const { keyboardLayout, setIndividualKey, setEntireKeyboardLayout, buildingFilter } = useStore((state) => ({
+  const { keyboardLayout, setIndividualKey, setEntireKeyboardLayout, buildingFilter, language, handleGameStart, setOptionsModalOpen } = useStore((state) => ({
     keyboardLayout: state.keyboardLayout,
     setIndividualKey: state.setIndividualKey,
     setEntireKeyboardLayout: state.setEntireKeyboardLayout,
     buildingFilter: state.buildingFilter,
+    language: state.language,
+    handleGameStart: state.handleGameStart,
+    setOptionsModalOpen: state.setOptionsModalOpen,
   }));
 
   /**
@@ -87,20 +94,20 @@ const KeyboardOptions = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Keyboard profile</h2>
-      <p>Select an existing profile or re-map individual keys by clicking on the respective button.</p>
+      <h2>{translateInterfaceText("Keyboard profile", language)}</h2>
+      <p>{translateInterfaceText("Select an existing profile or re-map individual keys by clicking on the respective button.", language)}</p>
       <div className={styles.inner}>
-        <h3 style={{ alignSelf: "flex-start" }}>Current layout</h3>
+        <h3 style={{ alignSelf: "flex-start" }}>{translateInterfaceText("Current layout", language)}</h3>
         <WrapSegmentedInputComponent
           name={`keymapOverlay`}
           value={deriveKeyboardLayout(KEYBOARD_DEFAULT_LAYOUTS(), keyboardLayout) || "NULL"}
           onValueChange={(value) => handleKeyboardLayoutChange(value)}
           options={[
-            { children: "QWERTY", value: "QWERTY" },
-            { children: "QWERTZ", value: "QWERTZ" },
-            { children: "AZERTY", value: "AZERTY" },
-            { children: "Dvorak", value: "DVORAK" },
-            { children: "Custom", value: "NULL" },
+            { children: translateInterfaceText("QWERTY", language), value: "QWERTY" },
+            { children: translateInterfaceText("QWERTZ", language), value: "QWERTZ" },
+            { children: translateInterfaceText("AZERTY", language), value: "AZERTY" },
+            { children: translateInterfaceText("Dvorak", language), value: "DVORAK" },
+            { children: translateInterfaceText("Custom", language), value: "NULL" },
           ]}
         />
         <div className={styles.grid} ref={gridRef}>
@@ -108,13 +115,17 @@ const KeyboardOptions = () => {
             return (
               <div className={styles.row} key={row}>
                 {el.map((el, col) => {
-                  const building = buildings.find(
-                    (el) =>
-                      el.shortcut[1][0] === row.toFixed() &&
-                      el.shortcut[1][2] === col.toFixed() &&
-                      (el.group === buildingFilter.group || el.group === "COMMON") &&
-                      el.age === showKeyboardIconOverlay
-                  );
+                  const matchesCell = (el) =>
+                    el.shortcut[1][0] === row.toFixed() &&
+                    el.shortcut[1][2] === col.toFixed() &&
+                    el.age === showKeyboardIconOverlay;
+                  const building =
+                    buildings.find(
+                      (el) => el.group === buildingFilter.group && matchesCell(el)
+                    ) || buildings.find(
+                      (el) => el.group === "COMMON" && matchesCell(el) &&
+                        !isCommonBuildingExcluded(el, buildingFilter.group)
+                    );
                   const keyCanBeRemapped = row === keyCanBeMapped[0] && col === keyCanBeMapped[1];
 
                   return (
@@ -132,14 +143,14 @@ const KeyboardOptions = () => {
 										`}
                       key={el === "?" ? col : el}
                     >
-                      <span>{keyCanBeRemapped ? "Press Key" : el}</span>
+                      <span>{keyCanBeRemapped ? translateInterfaceText("Press Key", language) : el}</span>
                       {building && showKeyboardIconOverlay && (
                         <div
                           className={`
 														${styles.icon} 
 														`}
                         >
-                          <img src={building.icon} alt={building.name} />
+                          <img src={building.icon} alt={translateBuildingName(building.name, language)} />
                         </div>
                       )}
                     </button>
@@ -156,13 +167,26 @@ const KeyboardOptions = () => {
           onValueChange={(value) => setShowKeyboardIconOverlay(value)}
           options={[
             //{ children: 'Hide', value: null },
-            { children: "Age I", value: "I" },
-            { children: "Age II", value: "II" },
-            { children: "Age III", value: "III" },
-            { children: "Age IV", value: "IV" },
+            { children: `${translateInterfaceText("Age", language)} I`, value: "I" },
+            { children: `${translateInterfaceText("Age", language)} II`, value: "II" },
+            { children: `${translateInterfaceText("Age", language)} III`, value: "III" },
+            { children: `${translateInterfaceText("Age", language)} IV`, value: "IV" },
           ]}
           style={{ width: 356 }}
         />
+      </div>
+      <div className={styles.footerActions}>
+        <Button
+          className={styles.startGame}
+          primary
+          onClick={() => {
+            handleGameStart();
+            setOptionsModalOpen(false);
+          }}
+        >
+          {translateInterfaceText("Start game", language)}
+        </Button>
+        <LanguageSwitch />
       </div>
     </div>
   );

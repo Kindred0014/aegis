@@ -32,8 +32,10 @@
 		right: auto;
 		bottom: auto;
 		left: 50%;
-		overflow: hidden;
-		// max-width: var(--layout-max-width);
+		max-width: calc(100vw - 2rem);
+		max-height: calc(100vh - 2rem);
+		overflow: auto;
+		box-sizing: border-box;
 		background: var(--color-background);
 		border-radius: 0.5rem;
 		transform: translate3d(-50%, 50%, 0);

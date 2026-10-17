@@ -9,13 +9,17 @@ import { Table, TableRow, TableItem } from "components/gameEnd/Table";
 import { GameMenu, GameFooter } from "views/shared";
 import { MIN_BUILDING_TRESHOLD } from "store/constants";
 import styles from "./index.module.scss";
+import { translateInterfaceText } from "utils/zh-CN";
 
 const GameEndView = () => {
+  const language = useStore((state) => state.language);
   const { score, endResult } = useStore((state) => ({
     score: state.score,
     endResult: state.endResult,
   }));
   const notEnoughData = score < MIN_BUILDING_TRESHOLD;
+  const resultItems = Array.isArray(endResult) ? endResult : [];
+  const hasResult = resultItems.length >= 5;
 
   // Since we only get a endResult array with a bunch of objects, we first
   // take it apart to get the interesint pieces.Button
@@ -23,38 +27,44 @@ const GameEndView = () => {
   // TODO: Add TypeScript to make this safe
 
   const numPlayedBuildings = {
-    value: endResult[0].value,
-    type: endResult[0].type,
+    value: resultItems[0]?.value ?? score,
+    type: resultItems[0]?.type || "buildings",
   };
-  const apm = { value: endResult[1].value, type: endResult[1].type };
-  const accuracy = { value: endResult[2].value, type: endResult[2].type };
+  const apm = {
+    value: resultItems[1]?.value ?? 0,
+    type: resultItems[1]?.type || "actions per minute",
+  };
+  const accuracy = {
+    value: resultItems[2]?.value ?? 0,
+    type: resultItems[2]?.type || "accuracy",
+  };
 
   // The endResult array just supplies us with the fastest and slowest building name and time.
   // We get the corresponding icon and shortcut (for visual purposes) by using the custom useBuilding hook.
   const slowest = {
-    name: endResult[3].value ? endResult[3].value[0] : 0,
-    time: endResult[3].value ? endResult[3].value[1] : 0,
-    type: endResult[3].type,
+    name: resultItems[3]?.value?.[0] || 0,
+    time: resultItems[3]?.value?.[1] ?? 0,
+    type: resultItems[3]?.type || "slowest building",
   };
   const fastest = {
-    name: endResult[4].value ? endResult[4].value[0] : 0,
-    time: endResult[4].value ? endResult[4].value[1] : 0,
-    type: endResult[4].type,
+    name: resultItems[4]?.value?.[0] || 0,
+    time: resultItems[4]?.value?.[1] ?? 0,
+    type: resultItems[4]?.type || "fastest building",
   };
   const slowestBuildingWithIcon = useBuilding(slowest.name);
   const fastestBuildingWithIcon = useBuilding(fastest.name);
 
-  return endResult ? (
+  return hasResult ? (
     <div className={styles.container}>
-      <h2 style={{ alignSelf: "flex-start" }}>Your result</h2>
+      <h2 style={{ alignSelf: "flex-start" }}>{translateInterfaceText("Your result", language)}</h2>
       <Table>
-        {notEnoughData && <Message>Stats require at least {MIN_BUILDING_TRESHOLD} played buildings.</Message>}
+        {notEnoughData && <Message>{translateInterfaceText("Stats require at least {count} played buildings.", language).replace("{count}", MIN_BUILDING_TRESHOLD)}</Message>}
         <TableRow>
-          <TableItem value={numPlayedBuildings.value} label={numPlayedBuildings.type} disabled={notEnoughData} />
-          <TableItem value={notEnoughData ? 0 : apm.value} label={apm.type} disabled={notEnoughData} />
+          <TableItem value={numPlayedBuildings.value} label={translateInterfaceText(numPlayedBuildings.type, language)} disabled={notEnoughData} />
+          <TableItem value={notEnoughData ? 0 : apm.value} label={translateInterfaceText(apm.type, language)} disabled={notEnoughData} />
           <TableItem
             value={notEnoughData ? 0 : accuracy.value}
-            label={accuracy.type}
+            label={translateInterfaceText(accuracy.type, language)}
             unit={"%"}
             disabled={notEnoughData}
           />
@@ -63,24 +73,24 @@ const GameEndView = () => {
           <TableItem
             showBuilding={slowestBuildingWithIcon}
             value={slowest.time}
-            label={slowest.type}
+            label={translateInterfaceText(slowest.type, language)}
             disabled={notEnoughData}
-            unit={"sec/avg"}
+            unit={language === "zh-CN" ? "秒/个" : "sec/avg"}
           />
           <TableItem
             showBuilding={fastestBuildingWithIcon}
             value={fastest.time}
-            label={fastest.type}
+            label={translateInterfaceText(fastest.type, language)}
             disabled={notEnoughData}
-            unit={"sec/avg"}
+            unit={language === "zh-CN" ? "秒/个" : "sec/avg"}
           />
         </TableRow>
       </Table>
-      <GameMenu />
+      <GameMenu showHome className={styles.menu} />
       <GameFooter />
     </div>
   ) : (
-    <div style={{ padding: "4rem 0" }}>Couldn't fetch end result.</div>
+    <div style={{ padding: "4rem 0" }}>{translateInterfaceText("Couldn't fetch end result.", language)}</div>
   );
 };
 

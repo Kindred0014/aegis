@@ -8,3 +8,13 @@
 		margin-bottom: calc(var(--vertical-gap) * 2);
 	}
 }
+
+.menu {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	gap: 1rem;
+
+	& > button:first-child {
+		margin-right: 0;
+	}
+}

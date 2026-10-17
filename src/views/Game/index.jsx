@@ -6,6 +6,7 @@ import useStore from "store";
 import { IconSingle, IconGrid, IconName, Keys, Score } from "components/game/";
 import { Button } from "components/common/Button";
 import styles from "./index.module.scss";
+import { translateInterfaceText } from "utils/zh-CN";
 
 const GameView = () => {
   const { recipe, score, scoreLimit, iconDisplayStyle, handleGameEnd } = useStore((state) => ({
@@ -18,6 +19,7 @@ const GameView = () => {
     currentA: state.recipe ? state.recipe[state.tick] : null,
   }));
   const useGrid = iconDisplayStyle === "GRID";
+  const language = useStore((state) => state.language);
   return recipe ? (
     <div className={styles.container}>
       <div
@@ -31,7 +33,7 @@ const GameView = () => {
       <div className={styles.bottom}>
         <Score score={score} scoreLimit={scoreLimit} />
         <Button onClick={handleGameEnd} tertiary>
-          End game
+          {translateInterfaceText("End game", language)}
         </Button>
       </div>
     </div>
@@ -39,8 +41,8 @@ const GameView = () => {
     // Catch error if user hasn't selected any building
     // by selecting neither any age nor type.
     <div className={styles.error} onClick={() => handleGameEnd()}>
-      <h3>No building selected 👀</h3>
-      <p>Click anywhere to end this session and change your settings.</p>
+      <h3>{translateInterfaceText("No building selected", language)}</h3>
+      <p>{translateInterfaceText("Click anywhere to end this session and change your settings.", language)}</p>
     </div>
   );
 };

@@ -10,11 +10,13 @@ import { LOCAL_STORAGE_KEY, KEYBOARD_DEFAULT_LAYOUTS } from "store/constants";
 import { GameMenu } from "../shared";
 import Keyboard from "components/common/Keyboard";
 import styles from "./index.module.scss";
+import { translateInterfaceText } from "utils/zh-CN";
 
 const BeforeFirstGame = () => {
-  const { setShowBeforeFirstGame, keyboardLayout } = useStore((state) => ({
+  const { setShowBeforeFirstGame, keyboardLayout, language } = useStore((state) => ({
     setShowBeforeFirstGame: state.setShowBeforeFirstGame,
     keyboardLayout: state.keyboardLayout,
+    language: state.language,
   }));
 
   /**
@@ -33,13 +35,19 @@ const BeforeFirstGame = () => {
   // Get current keyboard mapping
   const currentLayout = deriveKeyboardLayout(KEYBOARD_DEFAULT_LAYOUTS(), keyboardLayout);
 
-  const currentLayoutName = currentLayout === "NULL" ? "Custom" : currentLayout === "DVORAK" ? "Dvorak" : currentLayout;
+  const layoutNames = {
+    NULL: translateInterfaceText("Custom", language),
+    DVORAK: translateInterfaceText("Dvorak", language),
+  };
+  const currentLayoutName = layoutNames[currentLayout] || currentLayout;
 
   return (
     <div className={styles.container}>
       <div>
         <h2>
-          The keyboard layout is set to <span>{currentLayoutName}</span>, is that correct?
+          {language === "zh-CN"
+            ? translateInterfaceText("keyboard check", language).replace("{layout}", currentLayoutName)
+            : `The keyboard layout is set to ${currentLayoutName}, is that correct?`}
         </h2>
         <Keyboard keyboardLayout={keyboardLayout} />
       </div>

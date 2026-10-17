@@ -16,7 +16,7 @@ const OptionsView = () => {
   /**
    * Let's get all option values and option setters from our useStore hook.
    */
-  const { showBeforeFirstGame, keyboardLayout, scoreLimit, showLabeledKeys, iconDisplayStyle, buildingFilter } =
+  const { showBeforeFirstGame, keyboardLayout, scoreLimit, showLabeledKeys, iconDisplayStyle, buildingFilter, language } =
     useStore((state) => ({
       optionsModalOpen: state.optionsModalOpen,
       showBeforeFirstGame: state.showBeforeFirstGame,
@@ -27,6 +27,7 @@ const OptionsView = () => {
       showLabeledKeys: state.showLabeledKeys,
       iconDisplayStyle: state.iconDisplayStyle,
       buildingFilter: state.buildingFilter,
+      language: state.language,
     }));
   const { ages, types, group } = buildingFilter;
 
@@ -42,6 +43,7 @@ const OptionsView = () => {
     showLabeledKeys,
     keyboardLayout,
     iconDisplayStyle,
+    language,
   };
 
   // Update local store when game option changes
@@ -53,6 +55,7 @@ const OptionsView = () => {
     scoreLimit,
     showLabeledKeys,
     iconDisplayStyle,
+    language,
     group,
     ages.I,
     ages.II,

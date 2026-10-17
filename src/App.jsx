@@ -27,6 +27,7 @@ const App = () => {
     isPlaying,
     endResult,
     showBeforeFirstGame,
+    language,
     defaultGameOptions,
     updateGameSettingsFromLocalStorage,
     setEntireKeyboardLayout,
@@ -36,8 +37,10 @@ const App = () => {
     isPlaying: state.isPlaying,
     endResult: state.endResult,
     showBeforeFirstGame: state.showBeforeFirstGame,
+    language: state.language,
     defaultGameOptions: {
       scoreLimit: state.scoreLimit,
+      language: state.language,
       buildingFilter: state.buildingFilter,
       showLabeledKeys: state.showLabeledKeys,
       keyboardLayout: state.keyboardLayout,
@@ -47,6 +50,10 @@ const App = () => {
     setEntireKeyboardLayout: state.setEntireKeyboardLayout,
   }));
   const { gameEnded } = useGameState();
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   /**
    * 2. Check if local storage has been set.

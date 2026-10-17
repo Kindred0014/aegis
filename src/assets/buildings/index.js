@@ -22,6 +22,7 @@ import monastery from '../icons/buildings/monastery.png'
 import mosque from '../icons/buildings/mosque.png'
 import outpost from '../icons/buildings/outpost.png'
 import ovoo from '../icons/buildings/ovoo.png'
+import ovooGoldenHorde from '../icons/buildings/ovoo-golden-horde.png'
 import pagoda from '../icons/buildings/pagoda.png'
 import palisadeGate from '../icons/buildings/palisade-gate.png'
 import palisade from '../icons/buildings/palisade.png'
@@ -46,6 +47,26 @@ import oliveGrove from '../icons/buildings/olive-grove.png'
 import cistern from '../icons/buildings/cistern.png'
 import aqueduct from '../icons/buildings/aqueduct.png'
 import mercenaryHouse from '../icons/buildings/mercenary-house.png'
+import buddhistTemple from '../icons/buildings/buddhist-temple.png'
+import fortifiedOutpost from '../icons/buildings/fortified-outpost.png'
+import goldenTent from '../icons/buildings/golden-tent.png'
+import grassland from '../icons/buildings/grassland.png'
+import hojoEstate from '../icons/buildings/hojo-clan-daimyo-estate.png'
+import machineWorkshop from '../icons/buildings/machine-workshop.png'
+import madrasa from '../icons/buildings/madrasa.png'
+import manor from '../icons/buildings/manor.png'
+import matsuri from '../icons/buildings/matsuri.png'
+import odaEstate from '../icons/buildings/oda-clan-daimyo-estate.png'
+import prayerTent from '../icons/buildings/prayer-tent.png'
+import stockyard from '../icons/buildings/stockyard.png'
+import takedaEstate from '../icons/buildings/takeda-clan-daimyo-estate.png'
+import tughlaqabadFort from '../icons/buildings/tughlaqabad-fort.png'
+import templarKeep from '../icons/buildings/templar-keep.png'
+import varangianArsenal from '../icons/buildings/varangian-arsenal.png'
+import varangianStronghold from '../icons/buildings/varangian-stronghold.png'
+import varangianWarcamp from '../icons/buildings/varangian-warcamp.png'
+import warStable from '../icons/buildings/war-stable.png'
+import workerElephant from '../icons/buildings/worker-elephant.png'
 
 const buildings = [
 	// Age I
@@ -1166,7 +1187,7 @@ const buildings = [
 		group: 'JAPANESE'
 	},
 	{
-		name: 'Shinto Shrine / Buddhist Temple',
+		name: 'Shinto Shrine', nameZh: '神社',
 		shortcut: ['0:2', '0:0'],
 		icon: shintoShrine,
 		type: 'economic',
@@ -1337,5 +1358,139 @@ const buildings = [
 		group: 'BYZANTINES'
 	},
 ]
+
+const civilizationVariants = [
+	{ group: 'SENGOKU', source: 'JAPANESE', exclude: ['Blacksmith', 'Market'] },
+	{ group: 'TEMPLAR', source: 'GENERIC', exclude: ['Lumber Camp', 'Keep'] },
+	{ group: 'LANCASTER', source: 'GENERIC' },
+	{ group: 'GOLDEN_HORDE', source: 'MONGOL', exclude: ['Ovoo', 'Ger', 'Pasture', 'Monastery', 'Outpost', 'Palisade Wall', 'Palisade Gate'] },
+	{ group: 'TUGHLAQ', source: 'DELHI', exclude: ['Mill', 'Lumber Camp', 'Mining Camp', 'Keep', 'University', 'Mosque'] },
+	{ group: 'MACEDONIAN', source: 'GENERIC', exclude: ['Keep', 'University'] },
+	{ group: 'JIN', source: 'GENERIC', exclude: ['Keep', 'Archery Range', 'Stable'] }
+]
+
+civilizationVariants.forEach(({ group, source, exclude = [] }) => {
+	const inheritedBuildings = buildings
+		.filter((building) => building.group === source && !exclude.includes(building.name))
+		.map((building) => ({ ...building, group }))
+	buildings.push(...inheritedBuildings)
+})
+
+const variantBuildings = [
+	{
+		name: 'Matsuri', nameZh: '祭典', shortcut: ['0:0', '0:1'], icon: matsuri,
+		type: 'economic', age: 'I', group: 'SENGOKU'
+	},
+	{
+		name: 'Hojo Clan Daimyo Estate', nameZh: '北条氏族大名府邸', shortcut: ['0:1', '0:3'], icon: hojoEstate,
+		type: 'military', age: 'II', group: 'SENGOKU'
+	},
+	{
+		name: 'Oda Clan Daimyo Estate', nameZh: '织田氏族大名府邸', shortcut: ['0:1', '1:3'], icon: odaEstate,
+		type: 'military', age: 'II', group: 'SENGOKU'
+	},
+	{
+		name: 'Takeda Clan Daimyo Estate', nameZh: '武田氏族大名府邸', shortcut: ['0:1', '2:3'], icon: takedaEstate,
+		type: 'military', age: 'II', group: 'SENGOKU'
+	},
+	{
+		name: 'Buddhist Temple', nameZh: '佛寺', shortcut: ['0:2', '0:0'], icon: buddhistTemple,
+		type: 'research', age: 'III', group: 'SENGOKU'
+	},
+	{
+		name: 'Templar Keep', nameZh: '要塞', shortcut: ['0:1', '1:2'], icon: templarKeep,
+		type: 'fortified', age: 'II', group: 'TEMPLAR'
+	},
+	{
+		name: 'Manor', nameZh: '庄园', shortcut: ['0:1', '1:2'], icon: manor,
+		type: 'economic', age: 'II', group: 'LANCASTER'
+	},
+	{
+		name: 'Ger', nameZh: '蒙古包', shortcut: ['0:0', '0:1'], icon: ger,
+		type: 'economic', age: 'I', group: 'GOLDEN_HORDE'
+	},
+	{
+		name: 'Stockyard', nameZh: '牲畜围栏', shortcut: ['0:0', '1:0'], icon: stockyard,
+		type: 'economic', age: 'I', group: 'GOLDEN_HORDE'
+	},
+	{
+		name: 'Ovoo', nameZh: '敖包', shortcut: ['0:0', '0:0'], icon: ovooGoldenHorde,
+		type: 'economic', age: 'I', group: 'GOLDEN_HORDE'
+	},
+	{
+		name: 'Palisade Wall', nameZh: '木栅栏', shortcut: ['0:0', '2:1'], icon: palisade,
+		type: 'fortified', age: 'I', group: 'GOLDEN_HORDE'
+	},
+	{
+		name: 'Palisade Gate', nameZh: '木门', shortcut: ['0:0', '2:2'], icon: palisadeGate,
+		type: 'fortified', age: 'I', group: 'GOLDEN_HORDE'
+	},
+	{
+		name: 'Fortified Outpost', nameZh: '设防哨站', shortcut: ['0:0', '2:0'], icon: fortifiedOutpost,
+		type: 'fortified', age: 'I', group: 'GOLDEN_HORDE'
+	},
+	{
+		name: 'Prayer Tent', nameZh: '祈祷帐篷', shortcut: ['0:2', '0:0'], icon: prayerTent,
+		type: 'research', age: 'III', group: 'GOLDEN_HORDE'
+	},
+	{
+		name: 'Worker Elephant', nameZh: '工作大象', shortcut: ['0:0', '0:1'], icon: workerElephant,
+		type: 'economic', age: 'I', group: 'TUGHLAQ'
+	},
+	{
+		name: 'Mosque', nameZh: '清真寺', shortcut: ['0:2', '0:0'], icon: mosque,
+		type: 'economic', age: 'III', group: 'TUGHLAQ'
+	},
+	{
+		name: 'Tughlaqabad Fort', nameZh: '腾格拉卡巴德堡垒', shortcut: ['0:1', '1:2'], icon: tughlaqabadFort,
+		type: 'fortified', age: 'II', group: 'TUGHLAQ'
+	},
+	{
+		name: 'Madrasa', nameZh: '学苑', shortcut: ['0:3', '0:0'], icon: madrasa,
+		type: 'research', age: 'IV', group: 'TUGHLAQ'
+	},
+	{
+		name: 'Varangian Stronghold', nameZh: '瓦兰吉堡垒', shortcut: ['0:0', '1:1'], icon: varangianStronghold,
+		type: 'military', age: 'I', group: 'MACEDONIAN'
+	},
+	{
+		name: 'Varangian Warcamp', nameZh: '瓦兰吉军营', shortcut: ['0:0', '1:3'], icon: varangianWarcamp,
+		type: 'military', age: 'I', group: 'MACEDONIAN'
+	},
+	{
+		name: 'Varangian Arsenal', nameZh: '瓦兰吉兵工厂', shortcut: ['0:1', '0:0'], icon: varangianArsenal,
+		type: 'research', age: 'II', group: 'MACEDONIAN'
+	},
+	{
+		name: 'Keep', nameZh: '城堡', shortcut: ['0:2', '2:0'], icon: keep,
+		type: 'fortified', age: 'III', group: 'MACEDONIAN'
+	},
+	{
+		name: 'Grassland', nameZh: '草原', shortcut: ['0:1', '1:2'], icon: grassland,
+		type: 'economic', age: 'II', group: 'JIN'
+	},
+	{
+		name: 'Machine Workshop', nameZh: '机械车间', shortcut: ['0:1', '1:0'], icon: machineWorkshop,
+		type: 'military', age: 'II', group: 'JIN'
+	},
+	{
+		name: 'War Stable', nameZh: '战争马厩', shortcut: ['0:1', '1:1'], icon: warStable,
+		type: 'military', age: 'II', group: 'JIN'
+	},
+	{
+		name: 'Keep', nameZh: '城堡', shortcut: ['0:2', '2:0'], icon: keep,
+		type: 'fortified', age: 'III', group: 'JIN'
+	}
+]
+
+variantBuildings.forEach((building) => {
+	const existingIndex = buildings.findIndex((entry) =>
+		entry.group === building.group &&
+		entry.shortcut[0] === building.shortcut[0] &&
+		entry.shortcut[1] === building.shortcut[1]
+	)
+	if (existingIndex === -1) buildings.push(building)
+	else buildings[existingIndex] = building
+})
 
 export default buildings

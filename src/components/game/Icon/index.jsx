@@ -6,11 +6,13 @@ import useStore from "store";
 import { useGameState } from "hooks";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import styles from "./icon.module.scss";
+import { translateBuildingName } from "utils/zh-CN";
 
 const IconSingle = () => {
-  const score = useStore((state) => state.score);
+  const { score, language } = useStore((state) => ({ score: state.score, language: state.language }));
   const { building } = useGameState();
   const { name, icon, type } = building?.preemptive || {};
+  const translatedName = translateBuildingName(name, language);
 
   return (
     <>
@@ -22,13 +24,13 @@ const IconSingle = () => {
                  ${styles[type]}
                  `}
           >
-            {icon && <img className={styles.icon} src={icon} alt={name + " icon"} />}
+            {icon && <img className={styles.icon} src={icon} alt={`${translatedName} ${language === "zh-CN" ? "图标" : "icon"}`} />}
           </div>
         </CSSTransition>
       </TransitionGroup>
       <TransitionGroup>
         <CSSTransition key={score} timeout={300} classNames="fade">
-          <div className={styles.name}>{name}</div>
+          <div className={styles.name}>{translatedName}</div>
         </CSSTransition>
       </TransitionGroup>
     </>
@@ -36,14 +38,16 @@ const IconSingle = () => {
 };
 
 const IconGrid = () => {
-  const { keyboardLayout } = useStore((state) => ({
+  const { keyboardLayout, language } = useStore((state) => ({
     keyboardLayout: state.keyboardLayout,
+    language: state.language,
   }));
   const { building, keyPosition, playerSecondKeyCorrect } = useGameState();
 
   const firstKeyPosition = keyPosition.current?.firstKey || "";
   const secondKeyPosition = keyPosition.current?.secondKey || "";
   const { name, icon, type } = building?.current || {};
+  const translatedName = translateBuildingName(name, language);
   const ages = [0, 1, 2, 3];
 
   return (
@@ -66,7 +70,7 @@ const IconGrid = () => {
                                                  ${playerSecondKeyCorrect && isKey ? styles.scored : null}`}
                         key={col + "i"}
                       >
-                        {isKey && <img className={`${styles.icon}`} src={icon} alt={name + " icon"} />}
+                        {isKey && <img className={`${styles.icon}`} src={icon} alt={`${translatedName} ${language === "zh-CN" ? "图标" : "icon"}`} />}
                       </span>
                     ) : null;
                   })}
@@ -81,10 +85,11 @@ const IconGrid = () => {
 };
 
 const IconName = () => {
+  const language = useStore((state) => state.language);
   const { building } = useGameState();
   const { name } = building?.preemptive || {};
 
-  return <div className={styles.nameOnly}>{name}</div>;
+  return <div className={styles.nameOnly}>{translateBuildingName(name, language)}</div>;
 };
 
 export { IconSingle, IconGrid, IconName };

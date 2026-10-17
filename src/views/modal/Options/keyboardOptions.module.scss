@@ -1,6 +1,29 @@
 .container {
-	padding: 3rem;
+	display: flex;
+	flex: 0 0 28rem;
+	flex-direction: column;
+	width: 28rem;
+	max-width: 40%;
+	box-sizing: border-box;
+	padding: 3rem 2rem;
 	background: var(--color-body);
+	border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.startGame {
+	flex: 1 1 auto;
+	width: auto;
+	min-width: 0;
+	box-sizing: border-box;
+	margin: 0;
+}
+
+.footerActions {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: auto;
 }
 
 .inner {
@@ -111,5 +134,15 @@
 	& img {
 		width: 2rem;
 		height: 2rem;
+	}
+}
+
+@media (max-width: 1100px) {
+	.container {
+		width: 100%;
+		max-width: none;
+		flex: 0 0 auto;
+		border-left: 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.05);
 	}
 }

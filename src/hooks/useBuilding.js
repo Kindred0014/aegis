@@ -3,7 +3,12 @@ import buildings from "assets/buildings";
 
 const useBuilding = (buildingName) => {
   const currentKeyboardLayout = useStore((state) => state.keyboardLayout);
-  const matchingBuilding = buildings?.find((el) => buildingName === el.name) || null;
+  const currentCivilization = useStore((state) => state.buildingFilter.group);
+  const matchingBuilding =
+    buildings?.find((el) => buildingName === el.name && el.group === currentCivilization) ||
+    buildings?.find((el) => buildingName === el.name && el.group === "COMMON") ||
+    buildings?.find((el) => buildingName === el.name) ||
+    null;
 
   if (!matchingBuilding) return null;
 

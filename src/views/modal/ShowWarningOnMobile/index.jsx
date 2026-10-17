@@ -6,12 +6,15 @@
 import { useState } from "react";
 import { useWindowSize, useEffectOnce } from "hooks/";
 import styles from "./index.module.scss";
+import useStore from "store";
+import { translateInterfaceText } from "utils/zh-CN";
 
 const MOBILE_WIDTH = 769;
-const MAIL_SUBJECT = "[Reminder] Aegis, tiny game for AoE shortcuts";
+const MAIL_SUBJECT = "[Reminder] Aegis: Age of Empires IV shortcut practice";
 const MAIL_BODY = "https://www.aegis.lol/";
 
 const ShowWarningOnMobileView = () => {
+  const language = useStore((state) => state.language);
   const [showMobileOnlyMsg, setShowMobileOnlyMsg] = useState(false);
   const { width } = useWindowSize();
   useEffectOnce(() => {
@@ -20,10 +23,10 @@ const ShowWarningOnMobileView = () => {
 
   return showMobileOnlyMsg ? (
     <div className={styles.container}>
-      <h2>Aegis is a typing game that requires keyboard input and doesn't work on mobile devices.</h2>
+      <h2>{translateInterfaceText("Aegis is a typing game that requires keyboard input and doesn't work on mobile devices.", language)}</h2>
       <div>
-        <a href={`mailto:?subject=${MAIL_SUBJECT}&body=${MAIL_BODY}`}>📧 Email yourself this link for later</a>
-        <button onClick={() => setShowMobileOnlyMsg(false)}>Show game anyway</button>
+        <a href={`mailto:?subject=${translateInterfaceText(MAIL_SUBJECT, language)}&body=${MAIL_BODY}`}>{translateInterfaceText("📧 Email yourself this link for later", language)}</a>
+        <button onClick={() => setShowMobileOnlyMsg(false)}>{translateInterfaceText("Show game anyway", language)}</button>
       </div>
     </div>
   ) : null;
